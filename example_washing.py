@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     dishwasher_profile = np.array([0.1, 0.2, 0.2, 0.1, 0.3, 0.3, 0.1, 0.2, 0.1])
     for i in range(4):
-        request = Request(i, f'dishwasher{i}', dishwasher_profile, 99)  # TODO: check timeouts
+        request = Request(i, f'dishwasher{i}', dishwasher_profile, i*5)
         hub.add_request(request, autoschedule=False)
 
     hub.schedule()

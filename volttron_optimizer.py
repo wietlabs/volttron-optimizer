@@ -1,4 +1,5 @@
 from itertools import product
+from collections import defaultdict
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 from typing import List, Dict
@@ -84,7 +85,7 @@ class LinearProgrammingScheduler(IScheduler):
         if not requests:
             return {}
 
-        available_energy = utils.pad(available_energy, self.lookahead)
+        available_energy = utils.pad(available_energy, len(available_energy) - self.lookahead)
 
         offset_ranges = {
             r: min(self.lookahead - len(r.profile) + 1, r.timeout + 1) for r in requests
@@ -116,27 +117,26 @@ class LinearProgrammingScheduler(IScheduler):
         req_energy_vars = {r: [] for r in requests}
 
         for request in requests:
-            for i, offset in enumerate(range(self.lookahead)):
+            for i, offset in enumerate(range(offset_ranges[request] + len(request.profile) - 1)):
                 req_var = LpVariable(f'req_{offset}_{request.request_id}', lowBound=0, cat='Continuous')
                 req_energy_vars[request].append(req_var)
 
-        # Enforce lower bound on required energy
+        # Enforce lower bound on required energy and
+        # collect all variables that will enforce upper bound
+        upper_bounds = {r: defaultdict(list) for r in requests}
+
         for request in requests:
             profile = request.profile
             for offset, offset_var in enumerate(offset_vars[request]):
                 for i, req in enumerate(profile):
                     model += req * offset_var <= req_energy_vars[request][offset + i]
+                    upper_bounds[request][offset + i].append((req, offset_var))
 
         # Enforce upper bounds (if time instant not chosen -> zero energy required)
         for request in requests:
-            for offset in range(self.lookahead):
-                upper_bound = []
-                l, r = max(0, offset - len(request.profile) + 1), min(offset + 1, len(offset_vars[request]))
-                for i in range(l, r):
-                    upper_bound.append((request.profile[r - i - 1], offset_vars[request][i]))
-
-                upper_bound = [u[0] * u[1] for u in upper_bound]
-                model += sum(upper_bound) >= req_energy_vars[request][offset]
+            for offset in upper_bounds[request]:
+                upper_bound = sum([u[0] * u[1] for u in upper_bounds[request][offset]])
+                model += upper_bound >= req_energy_vars[request][offset]
 
         # Prepare cost function variables
         pos_cost_vars = [LpVariable(f'pos_{offset}', lowBound=0, cat='Continuous') for offset in range(self.lookahead)]
@@ -144,10 +144,15 @@ class LinearProgrammingScheduler(IScheduler):
 
         for offset in range(self.lookahead):
             remaining_energy = available_energy[offset]
-            planned_energy = [req_energy_vars[req][offset] for req in requests]
-            delta_energy = remaining_energy - sum(planned_energy)
-            model += pos_cost_vars[offset] >= delta_energy
-            model += neg_cost_vars[offset] <= delta_energy
+            planned_energy = []
+            for request in requests:
+                if offset < offset_ranges[request] + len(request.profile) - 1:
+                    planned_energy.append(req_energy_vars[request][offset])
+
+            if planned_energy:
+                delta_energy = remaining_energy - sum(planned_energy)
+                model += pos_cost_vars[offset] >= delta_energy
+                model += neg_cost_vars[offset] <= delta_energy
 
         # Optimize
         cost_f = 0.05 * sum(pos_cost_vars)
