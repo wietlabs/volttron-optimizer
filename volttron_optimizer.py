@@ -6,6 +6,7 @@ from typing import List, Dict
 import random
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 from pulp import LpMinimize, LpProblem, LpStatus, LpVariable, value
 import utils
 
@@ -310,12 +311,24 @@ class Hub:
         fig, ax = plt.subplots()
         ax.set_xlabel('ticks')
         ax.set_ylabel('energy')
-        ax.set_ylim((-0.25, 1.25))
+        ax.set_ylim((-0.6, 1.25))
 
         ax.plot(source_energy, color='green', label='available')
         ax.plot(assigned_energy, color='red', label='assigned')
         ax.plot(planned_energy, color='blue', label='planned')
         ax.plot(consumed_energy, color='black', label='consumed')
+
+        for job in self.running_jobs:
+            offset = 0
+            duration = len(job.profile)
+            rect = patches.Rectangle((offset, -0.2-0.1*job.request_id), duration, 0.1, linewidth=1, edgecolor='red', facecolor='pink')
+            ax.add_patch(rect)
+
+        for request in self.waiting_requests:
+            offset = self.plan[request.request_id]
+            duration = len(request.profile)
+            rect = patches.Rectangle((offset, -0.2-0.1*request.request_id), duration, 0.1, linewidth=1, edgecolor='blue', facecolor='lightblue')
+            ax.add_patch(rect)
 
         ax.legend(loc='upper right')
         return fig

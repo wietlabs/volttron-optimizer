@@ -1,0 +1,13 @@
+TODO:
+volttronizacja
+testy
+pyowm api weather forecast?
+dokumentacja
+
+POKAZ:
+1. wykresy/testy
+2. volttron
+
+TODO LATER:
+split hub into two objects (@dataclass .available_energy, ... | .add_request, .tick)
+support for timeout=None instead of 9999
