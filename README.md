@@ -44,3 +44,10 @@ Power consumer agents publish requests for power to the Hub agent. They transfer
 ##### Optimization
 ...
 
+| ![](img/example_complementary_before.png) | ![](img/example_complementary_after.png) |
+-- | --
+Without optimization | With optimization
+
+| ![](img/example_washing_before.png) | ![](img/example_washing_after_000.png) |
+-- | --
+Without optimization | With optimization
