@@ -26,9 +26,7 @@ For the sake of simplicity we consider a single home equipped with a set of phot
 ##### 2.1. Central unit
 We introduce a single **Hub** agent responsible for scheduling working periods of power consumers. This agent receives data from both suppliers and consumers. On that basis it assigns time slots for the devices that minimize the following quantity:
 
-![](eq1.png)
-where 
-![](eq2.png)
+α * energy_to_buy + β * energy_oversupply + θ * average_delay
 
 For large values of alpha this encourages usage of free energy from the panels.
 
@@ -36,18 +34,18 @@ For large values of alpha this encourages usage of free energy from the panels.
 Agents responsible for communication with PV panels use Volttron pub-sub functionality to publish power supply data, i.e. power and voltage. As of time being, dummy data is used. We assume that PV panels provide us with an estimate supply for the next 6 hours, on which we base our optimisation.
 
 ##### 2.3. Power consumption
+
 Power consumer agents publish requests for power to the Hub agent. They transfer the following information:
- * requested energy profile - how much power [$$kWh$$] is required over a period of time 
+ * requested energy profile - how much power [kWh] is required over a period of time 
  * maximal delay for the device initialization
 
-### 3. Implementation details
-##### Optimization
+### 3. Results
 ...
 
+Without optimization | With optimization
+-- | --
 | ![](img/example_complementary_before.png) | ![](img/example_complementary_after.png) |
--- | --
-Without optimization | With optimization
 
-| ![](img/example_washing_before.png) | ![](img/example_washing_after_000.png) |
--- | --
 Without optimization | With optimization
+-- | --
+| ![](img/example_washing_before.png) | ![](img/example_washing_after_000.png) |
