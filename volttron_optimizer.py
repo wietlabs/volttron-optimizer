@@ -86,7 +86,7 @@ class LinearProgrammingScheduler(IScheduler):
         if not requests:
             return {}
 
-        available_energy = utils.pad(available_energy, len(available_energy) - self.lookahead)
+        available_energy = utils.pad(available_energy, self.lookahead)
 
         offset_ranges = {
             r: min(self.lookahead - len(r.profile) + 1, r.timeout + 1) for r in requests
