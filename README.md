@@ -1,4 +1,10 @@
 # Household energy optimization with Volttron framework
+
+### Authors
+* [@enthyp](https://github.com/enthyp)
+* [@DzikiLamer](https://github.com/DzikiLamer)
+* [@tomekzaw](https://github.com/tomekzaw)
+
 ### 1. Volttron platform installation
 Run the following commands:
  * `git clone https://github.com/VOLTTRON/volttron --branch releases/7.x`
@@ -19,10 +25,12 @@ For the sake of simplicity we consider a single home equipped with a set of phot
 
 ##### 2.1. Central unit
 We introduce a single **Hub** agent responsible for scheduling working periods of power consumers. This agent receives data from both suppliers and consumers. On that basis it assigns time slots for the devices that minimize the following quantity:
-$$\begin{aligned} cost = PV power\ oversupply + {\alpha} \times network\ power\ supply \end{aligned}$$
-where $$\begin{aligned}{\alpha} > 0\end{aligned}.$$
 
-For large values of $${\alpha}$$ this encourages usage of free energy from the panels.
+![](eq1.png)
+where 
+![](eq2.png)
+
+For large values of alpha this encourages usage of free energy from the panels.
 
 ##### 2.2. Power supply
 Agents responsible for communication with PV panels use Volttron pub-sub functionality to publish power supply data, i.e. power and voltage. As of time being, dummy data is used. We assume that PV panels provide us with an estimate supply for the next 6 hours, on which we base our optimisation.
