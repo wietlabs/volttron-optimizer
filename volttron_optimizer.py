@@ -211,7 +211,7 @@ class Hub:
     def schedule(self) -> None:
         self.scheduleWith(self.scheduler)
 
-    def scheduleWith(self, scheduler: IScheduler) -> None:
+    def schedule_with(self, scheduler: IScheduler) -> None:
         self.plan = scheduler.schedule(self.available_energy, self.waiting_requests)
 
     @property
