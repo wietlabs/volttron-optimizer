@@ -61,7 +61,7 @@ scheduler = NoDelayScheduler()
 ```py
 scheduler = BruteForceScheduler(lookahead=20)
 ```
-* ``LinearProgrammingScheduler`` reduces scheduling problem to Mixed Linear Programming instance and finds the optimal solution using ILP solver.
+* ``LinearProgrammingScheduler`` reduces scheduling problem to Mixed Integer Programming instance and finds the optimal solution using ILP solver.
 ```py
 scheduler = LinearProgrammingScheduler(lookahead=20)
 ```
