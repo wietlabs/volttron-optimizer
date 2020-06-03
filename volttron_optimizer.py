@@ -208,8 +208,11 @@ class Hub:
         if autoschedule:
             self.schedule()
 
-    def schedule(self):
-        self.plan = self.scheduler.schedule(self.available_energy, self.waiting_requests)
+    def schedule(self) -> None:
+        self.scheduleWith(self.scheduler)
+
+    def scheduleWith(self, scheduler: IScheduler) -> None:
+        self.plan = scheduler.schedule(self.available_energy, self.waiting_requests)
 
     @property
     def source_energy(self) -> np.array:
