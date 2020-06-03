@@ -119,8 +119,7 @@ class LinearProgrammingScheduler(IScheduler):
         # "choose 1 offset" constraint
         for request in requests:
             offset_sum = sum(offset_vars[request])
-            model += offset_sum >= 1  # TODO: check ==
-            model += offset_sum <= 1
+            model += offset_sum == 1
 
         # Prepare required energy variables for all requests and time instants
         req_energy_vars = {r: [] for r in requests}
