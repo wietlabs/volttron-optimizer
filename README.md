@@ -48,4 +48,8 @@ Without optimization | With optimization
 -- | --
 | ![](img/example_washing_before.png) | ![](img/example_washing_after_000.png) |
 
+Without optimization | With optimization
+-- | --
+| ![](img/example_comparision_NoDelayScheduler.png) | ![](img/example_comparision_LinearProgrammingScheduler.png) |
+
 ![](img/example_washing.gif)
