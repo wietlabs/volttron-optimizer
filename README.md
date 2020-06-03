@@ -72,7 +72,7 @@ Execution plan is represented in a form of dictionary where keys are the request
 {1342: 2, 1343: 0, 1344: 5}
 ```
 
-Energy source's profiles and device's requests are transferred to a single hub. Hub is responsible for accepting orders, preparing the execution plan and sending launch permits to the devices in the appropriate time. Hub must be initialized with an instance of scheduler. 
+Energy source's profiles and device's requests are transferred to a single hub. Hub is responsible for accepting requests, preparing the execution plan and sending launch permits to the devices in the appropriate time. Hub must be initialized with an instance of scheduler. 
 ```py
 hub = Hub(scheduler)
 ```
