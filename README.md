@@ -52,7 +52,71 @@ The intention of single execution of a device is called a request. Request consi
 request = Request(request_id=1342, device_name='dishwasher1', profile=dishwasher_profile, timeout=10)
 ```
 
+Different planning strategies are encapsulated as schedulers. Schedulers implement `schedule` method that accepts a profile of available energy with a list of waiting requests and returns the optimal exection plan. Currently there are three available schedulers:
+* ``NoDelayScheduler`` returns the most trivial execution plan that runs all pending requests without any delay.
+```py
+scheduler = NoDelayScheduler()
+```
+* ``BruteForceScheduler`` finds the best combination of delays by checking all possible delays for all requests. Please note that this scheduler is very resource-hungry.
+```py
+scheduler = BruteForceScheduler(lookahead=20)
+```
+* ``LinearProgrammingScheduler`` reduces scheduling problem to Mixed Linear Programming instance and finds the optimal solution using ILP solver.
+```py
+scheduler = LinearProgrammingScheduler(lookahead=20)
+```
+Both ``BruteForceScheduler`` and ``LinearProgrammingScheduler`` need to be parametrized with a number of ticks to plan ahead. Each request will start in `request.timeout` ticks and end before `scheduler.lookahead` ticks.
+
+Execution plan is represented in a form of dictionary where keys are the requests' identifiers and values are the calculated delays for corresponding requests.
+```py
+{1342: 2, 1343: 0, 1344: 5}
+```
+
+Energy source's profiles and device's requests are transferred to a single hub. Hub is responsible for accepting orders, preparing the execution plan and sending launch permits to the devices in the appropriate time. Hub must be initialized with an instance of scheduler. 
+```py
+hub = Hub(scheduler)
+```
+
+```py
+hub.update_source_profile(source_name='solarpanel1', profile=solar_panel_profile)
+```
+
+```py
+hub.add_request(request1)
+```
+
+```py
+for request in requests:
+    hub.add_request(request, autoschedule=False)
+...
+hub.schedule()
+```
+You may also use `add_requests` method that runs the scheduler only once.
+```py
+hub.add_requests([request2, request3, request4])
+```
+You may also temporarily use different scheduling strategy by passing other scheduler instance, e.g. for comparision purposes.
+```py
+hub.schedule_with(NoDelayScheduler())
+```
+In order to simulate the passage of time, the `tick` must be called. Every tick decreases all waiting requests' timeouts or starts
+```py
+hub.tick()
+```
+When using hub object in a VOLTTRON™ agent it is necessary to call `tick` method periodically:
+```py
+from volttron.platform.scheduling import cron
+
+@Core.schedule(cron('*/5 * * * *'))
+def cron_function(self):
+   self.hub.tick()
+```
+
 ### 4. Results
+
+Without optimization | With optimization
+-- | --
+| ![](img/example_comparision_NoDelayScheduler.png) | ![](img/example_comparision_LinearProgrammingScheduler.png) |
 
 Without optimization | With optimization
 -- | --
@@ -61,9 +125,5 @@ Without optimization | With optimization
 Without optimization | With optimization
 -- | --
 | ![](img/example_washing_before.png) | ![](img/example_washing_after_000.png) |
-
-Without optimization | With optimization
--- | --
-| ![](img/example_comparision_NoDelayScheduler.png) | ![](img/example_comparision_LinearProgrammingScheduler.png) |
 
 ![](img/example_washing.gif)
