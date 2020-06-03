@@ -69,11 +69,11 @@ class BruteForceScheduler(IScheduler):
 
             delta_energy = available_energy - planned_energy
 
-            energy_lost = sum(delta_energy[delta_energy < 0])  # TODO: rename
+            energy_lost = sum(delta_energy[delta_energy < 0])
             energy_to_buy = sum(delta_energy[delta_energy > 0])
             average_delay = sum(offsets) / len(requests)
 
-            score = 1*energy_to_buy + 0.05*energy_lost + 0.1*average_delay  # TODO: use metric object
+            score = 1*energy_to_buy + 0.05*energy_lost + 0.1*average_delay
 
             if score < best_score:
                 best_offsets = offsets
