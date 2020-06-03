@@ -76,22 +76,22 @@ Energy source's profiles and device's requests are transferred to a single hub. 
 ```py
 hub = Hub(scheduler)
 ```
-
+When an updated profile of energy source is published, `update_source_profile` method should be called:
 ```py
 hub.update_source_profile(source_name='solarpanel1', profile=solar_panel_profile)
 ```
-
+When a new request is received, `add_request` method has to be called.
 ```py
 hub.add_request(request1)
 ```
-
+When adding multiple requests one-by-one, you may turn off autoscheduling by adding `autoschedule=False` flag.
 ```py
 for request in requests:
     hub.add_request(request, autoschedule=False)
 ...
 hub.schedule()
 ```
-You may also use `add_requests` method that runs the scheduler only once.
+Alternatively, you may use `add_requests` method that runs the scheduler only once.
 ```py
 hub.add_requests([request2, request3, request4])
 ```
@@ -99,7 +99,7 @@ You may also temporarily use different scheduling strategy by passing other sche
 ```py
 hub.schedule_with(NoDelayScheduler())
 ```
-In order to simulate the passage of time, the `tick` must be called. Every tick decreases all waiting requests' timeouts or starts
+In order to simulate the passage of time, the `tick` must be called. Every tick launches jobs that should start in the current tick and decreases other waiting requests' timeouts by 1.
 ```py
 hub.tick()
 ```
