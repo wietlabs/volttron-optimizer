@@ -52,7 +52,7 @@ The intention of single execution of a device is called a request. Request consi
 request = Request(request_id=1342, device_name='dishwasher1', profile=dishwasher_profile, timeout=10)
 ```
 
-Different planning strategies are encapsulated as schedulers. Schedulers implement `schedule` method that accepts a profile of available energy with a list of waiting requests and returns the optimal exection plan. Currently there are three available schedulers:
+Different planning strategies are encapsulated as schedulers. Schedulers implement `schedule` method that accepts a profile of available energy with a list of waiting requests and returns the optimal execution plan. Currently there are three available schedulers:
 * ``NoDelayScheduler`` returns the most trivial execution plan that runs all pending requests without any delay.
 ```py
 scheduler = NoDelayScheduler()
