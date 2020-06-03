@@ -12,7 +12,7 @@ if __name__ == '__main__':
     solar_profile = utils.simulate_solar_profile(24*5, 8*4)  # 5:00-13:00
     hub.update_source_profile('solarpanel1', solar_profile, autoschedule=False)
 
-    dishwasher_profile = np.array([0.1, 0.2, 0.2, 0.1, 0.3, 0.3, 0.1, 0.2, 0.1])
+    dishwasher_profile = np.array([0.1, 0.2, 0.2, 0.1, 0.3, 0.3, 0.1, 0.3, 0.1])
     for i in range(4):
         request = Request(i, f'dishwasher{i}', dishwasher_profile, i*5)
         hub.add_request(request, autoschedule=False)
