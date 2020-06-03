@@ -31,10 +31,6 @@ class Job:
 
 
 class IScheduler(ABC):
-    def __init__(self, lookahead: int):
-        self.lookahead: int = lookahead
-        # TODO: metric parameters
-
     @abstractmethod
     def schedule(self, available_energy: np.array, requests: List[Request]) -> Dict[int, int]:
         pass
@@ -49,6 +45,9 @@ class NoDelayScheduler(IScheduler):
 
 
 class BruteForceScheduler(IScheduler):
+    def __init__(self, lookahead: int):
+        self.lookahead: int = lookahead
+
     def schedule(self, available_energy: np.array, requests: List[Request]) -> Dict[int, int]:
         if not requests:
             return {}
@@ -80,8 +79,6 @@ class BruteForceScheduler(IScheduler):
                 best_offsets = offsets
                 best_score = score
 
-        #print(best_score)
-
         plan = {
             request.request_id: offset
             for request, offset in zip(requests, best_offsets)
@@ -90,6 +87,9 @@ class BruteForceScheduler(IScheduler):
 
 
 class LinearProgrammingScheduler(IScheduler):
+    def __init__(self, lookahead: int):
+        self.lookahead: int = lookahead
+
     def schedule(self, available_energy: np.array, requests: List[Request]) -> Dict[int, int]:
         if not requests:
             return {}
