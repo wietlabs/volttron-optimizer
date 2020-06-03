@@ -208,6 +208,12 @@ class Hub:
         if autoschedule:
             self.schedule()
 
+    def add_requests(self, requests: List[Request], autoschedule: bool = True) -> None:
+        for request in requests:
+            self.add_request(request, autoschedule=False)
+        if autoschedule:
+            self.schedule()
+
     def schedule(self) -> None:
         self.scheduleWith(self.scheduler)
 
