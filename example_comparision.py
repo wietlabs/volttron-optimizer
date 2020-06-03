@@ -5,10 +5,10 @@ if __name__ == '__main__':
     seed0()
 
     solar_panel_profile = np.linspace(0, 1, 20)
-    request1 = Request(1, 'teapot', 0.1 * np.ones(6), 99)
+    request1 = Request(1, 'teapot', 0.1 * np.ones(8), 99)
     request2 = Request(2, 'oven', 0.8 * np.ones(6), 99)
 
-    for scheduler_class in LinearProgrammingScheduler, BruteForceScheduler:
+    for scheduler_class in NoDelayScheduler, LinearProgrammingScheduler, BruteForceScheduler:
         scheduler = scheduler_class(lookahead=20)
         hub = Hub(scheduler)
 
@@ -17,5 +17,6 @@ if __name__ == '__main__':
         hub.add_request(request2, autoschedule=False)
         hub.schedule()
 
-        hub.visualize(20).savefig(f'img/example_comparision_{scheduler_class.__name__}.png')
-        print(hub.score)
+        scheduler_name = scheduler_class.__name__
+        print(scheduler_name, hub.score)
+        hub.visualize(20).savefig(f'img/example_comparision_{scheduler_name}.png')

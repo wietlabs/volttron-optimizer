@@ -40,6 +40,14 @@ class IScheduler(ABC):
         pass
 
 
+class NoDelayScheduler(IScheduler):
+    def schedule(self, available_energy: np.array, requests: List[Request]) -> Dict[int, int]:
+        return {
+            request.request_id: 0
+            for request in requests
+        }
+
+
 class BruteForceScheduler(IScheduler):
     def schedule(self, available_energy: np.array, requests: List[Request]) -> Dict[int, int]:
         if not requests:
@@ -251,7 +259,12 @@ class Hub:
 
     @property
     def score(self) -> float:
-        delta_energy = self.available_energy - self.planned_energy
+        available_energy = self.available_energy
+        planned_energy = self.planned_energy
+        ticks = max(len(available_energy), len(planned_energy))
+        delta_energy = np.zeros(ticks)
+        delta_energy[:len(available_energy)] += available_energy
+        delta_energy[:len(planned_energy)] -= planned_energy
 
         energy_lost = sum(delta_energy[delta_energy < 0])
         energy_to_buy = sum(delta_energy[delta_energy > 0])
