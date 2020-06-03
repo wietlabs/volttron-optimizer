@@ -18,5 +18,5 @@ if __name__ == '__main__':
 
     hub.visualize(20).savefig('img/example_complementary_after.png')
 
-    hub.plan = {1: 0, 2: 0}
+    hub.schedule_with(NoDelayScheduler())
     hub.visualize(20).savefig('img/example_complementary_before.png')

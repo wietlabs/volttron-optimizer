@@ -215,7 +215,7 @@ class Hub:
             self.schedule()
 
     def schedule(self) -> None:
-        self.scheduleWith(self.scheduler)
+        self.schedule_with(self.scheduler)
 
     def schedule_with(self, scheduler: IScheduler) -> None:
         self.plan = scheduler.schedule(self.available_energy, self.waiting_requests)
