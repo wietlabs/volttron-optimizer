@@ -38,7 +38,21 @@ Power consumer agents publish requests for power to the Hub agent. They transfer
  * requested energy profile – how much power [kWh] is required over a period of time
  * maximal delay for the device initialization
 
-### 3. Results
+### 3. Examples
+Energy consumption of single execution of one device over a period of time is called a profile. Profiles are one-dimensional arrays of floating point numbers, where each sample represents average energy usage in a single time unit (e.g. 15 minutes).
+```py
+dishwasher_profile = np.array([0.1, 0.2, 0.2, 0.1, 0.3, 0.3, 0.1, 0.3, 0.1])
+```
+Profiles can also represent estimated energy production, e.g. of a solar panel:
+```py
+solar_panel_profile = np.array([0, 0, 0.08, 0.17, 0.23, 0.36, 0.40, 0.41, 0.42, 0.39])
+```
+The intention of single execution of a device is called a request. Request consists of an unique identifer, device's name, device's energy profile and maximal execution delay called timeout. Immediate start (with no delay) is represented by zero timeout.
+```py
+request = Request(request_id=1342, device_name='dishwasher1', profile=dishwasher_profile, timeout=10)
+```
+
+### 4. Results
 
 Without optimization | With optimization
 -- | --
