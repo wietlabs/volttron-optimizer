@@ -191,14 +191,14 @@ def cron_function(self):
 
 Without optimization | With optimization
 -- | --
-| ![](img/example_comparision_NoDelayScheduler.png) | ![](img/example_comparision_LinearProgrammingScheduler.png) |
+| ![](optimizer/img/example_comparision_NoDelayScheduler.png) | ![](optimizer/img/example_comparision_LinearProgrammingScheduler.png) |
 
 Without optimization | With optimization
 -- | --
-| ![](img/example_complementary_before.png) | ![](img/example_complementary_after.png) |
+| ![](optimizer/img/example_complementary_before.png) | ![](optimizer/img/example_complementary_after.png) |
 
 Without optimization | With optimization
 -- | --
-| ![](img/example_washing_before.png) | ![](img/example_washing_after_000.png) |
+| ![](optimizer/img/example_washing_before.png) | ![](optimizer/img/example_washing_after_000.png) |
 
-![](img/example_washing.gif)
+![](optimizer/img/example_washing.gif)
