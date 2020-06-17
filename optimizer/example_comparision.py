@@ -18,4 +18,4 @@ if __name__ == '__main__':
 
         scheduler_name = scheduler.__class__.__name__
         print(scheduler_name, hub.score)
-        hub.visualize(20).savefig(f'img/example_comparision_{scheduler_name}.png')
+        hub.visualize(20).savefig(f'img/example_comparision_{scheduler_name}.svg')

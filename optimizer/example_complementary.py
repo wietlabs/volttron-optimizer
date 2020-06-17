@@ -16,7 +16,7 @@ if __name__ == '__main__':
     hub.add_request(request2, autoschedule=False)
     hub.schedule()
 
-    hub.visualize(20).savefig('img/example_complementary_after.png')
+    hub.visualize(20).savefig('img/example_complementary_after.svg')
 
     hub.schedule_with(NoDelayScheduler())
-    hub.visualize(20).savefig('img/example_complementary_before.png')
+    hub.visualize(20).savefig('img/example_complementary_before.svg')
