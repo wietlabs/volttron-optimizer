@@ -24,6 +24,6 @@ if __name__ == '__main__':
 
     for t in range(25):
         fig = hub.visualize(lookahead)
-        fig.savefig(f'img/example_washing_after_{t:003d}.svg')
+        fig.savefig(f'img/example_washing_after_{t:03d}.svg')
         plt.close()
         hub.tick()
